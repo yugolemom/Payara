@@ -48,20 +48,14 @@ EXPOSE 4848 8009 8080 8181
 
 # CRENCIAIS DOS USUARIOS 
 
-RUN echo 'AS_ADMIN_PASSWORD=\n\
-AS_ADMIN_NEWPASSWORD='$ADMIN_PASSWORD'\n\
-EOF\n'\
->> /opt/tmpfile
-
-RUN echo 'AS_ADMIN_PASSWORD='$ADMIN_PASSWORD'\n\
-EOF\n'\
->> /opt/pwdfile
+RUN echo 'AS_ADMIN_PASSWORD=\n\ AS_ADMIN_NEWPASSWORD='$ADMIN_PASSWORD'\n\ EOF\n'\ >> /opt/tmpfile
+RUN echo 'AS_ADMIN_PASSWORD='$ADMIN_PASSWORD'\n\ EOF\n'\ >> /opt/pwdfile
 
 RUN \
  $PAYARA_PATH/bin/asadmin start-domain && \
  $PAYARA_PATH/bin/asadmin --user $ADMIN_USER --passwordfile=/opt/tmpfile change-admin-password && \
  $PAYARA_PATH/bin/asadmin --user $ADMIN_USER --passwordfile=/opt/pwdfile enable-secure-admin && \
-$PAYARA_PATH/bin/asadmin restart-domain
+ $PAYARA_PATH/bin/asadmin restart-domain
 
 # LIMPAR
 
