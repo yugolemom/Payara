@@ -7,21 +7,21 @@ echo "Assemble"
 #CONFIG PAYARA WEB SERVER
 
 
-cat <<- EOF > /opt/tmpfile
+cat <<- EOF > tmpfile
 AS_ADMIN_PASSWORD=
 AS_ADMIN_NEWPASSWORD=$ADMIN_PASSWORD
 EOF
 
-cat <<- EOF > /opt/pwdfile
+cat <<- EOF > pwdfile
 AS_ADMIN_PASSWORD=$ADMIN_PASSWORD
 EOF
 
 
-$PAYARA_PATH/bin/asadmin start-domain 
-$PAYARA_PATH/bin/asadmin --user $ADMIN_USER --passwordfile=/opt/tmpfile change-admin-password
-$PAYARA_PATH/bin/asadmin --user $ADMIN_USER --passwordfile=/opt/pwdfile enable-secure-admin 
-$PAYARA_PATH/bin/asadmin stop-domain
+asadmin start-domain 
+asadmin --user $ADMIN_USER --passwordfile=tmpfile change-admin-password
+asadmin --user $ADMIN_USER --passwordfile=pwdfile enable-secure-admin 
+asadmin stop-domain
 
-rm /opt/tmpfile
-rm /opt/pwdfile
-rm /opt/$PKG_FILE_NAME
+rm tmpfile
+rm pwdfile
+rm /usr/local/$PKG_FILE_NAME

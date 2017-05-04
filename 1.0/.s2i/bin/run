@@ -4,5 +4,5 @@
 
 echo "Run"
 
-$PAYARA_PATH/bin/asadmin start-domain 
+asadmin start-domain 
 
