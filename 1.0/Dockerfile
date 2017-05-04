@@ -13,7 +13,7 @@ ENV PAYARA_PATH /opt/payara41
 
 LABEL io.k8s.description="Payara Server Full" \
       io.k8s.display-name="Payara" \
-      io.openshift.expose-services="8080:http,8888:ping" \
+      io.openshift.expose-services="8080:http,8888:ping,8081:https" \
       io.openshift.tags="builder,payara" \
       io.openshift.s2i.destination="/tmp"
 
@@ -38,10 +38,12 @@ RUN chown -R payara:payara /opt
 
 COPY .s2i/bin/ $STI_SCRIPTS_PATH
 
-ENV JAVA_OPTIONS -Xmx512m
+# ENV JAVA_OPTIONS -Xmx512m
 
 USER payara
 WORKDIR $PAYARA_PATH
+
+EXPOSE 4848 8009 8080 8181
 
 # CRENCIAIS DOS USUARIOS 
 
@@ -58,8 +60,7 @@ RUN \
  $PAYARA_PATH/bin/asadmin start-domain && \
  $PAYARA_PATH/bin/asadmin --user $ADMIN_USER --passwordfile=/opt/tmpfile change-admin-password && \
  $PAYARA_PATH/bin/asadmin --user $ADMIN_USER --passwordfile=/opt/pwdfile enable-secure-admin && \
-$PAYARA_PATH/bin/asadmin restart-domain && \
-$PAYARA_PATH/bin/asadmin stop-domain
+$PAYARA_PATH/bin/asadmin restart-domain
 
 # LIMPAR
 
