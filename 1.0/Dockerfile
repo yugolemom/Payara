@@ -37,6 +37,4 @@ RUN useradd -b /opt -m -s /bin/bash -d $PAYARA_PATH payara && echo payara:payara
 COPY .s2i/bin/ $STI_SCRIPTS_PATH
 
 USER payara
-WORKDIR $PAYARA_PATH
-
 EXPOSE 4848 8009 8080 8181
