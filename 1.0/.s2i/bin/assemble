@@ -2,3 +2,18 @@
 
 
 echo "Assemble"
+
+# CRENCIAIS DOS USUARIOS 
+
+echo 'AS_ADMIN_PASSWORD=\n AS_ADMIN_NEWPASSWORD='$ADMIN_PASSWORD'\n EOF\n' >> /opt/tmpfile
+echo 'AS_ADMIN_PASSWORD='$ADMIN_PASSWORD'\n EOF\n' >> /opt/pwdfile
+
+$PAYARA_PATH/bin/asadmin start-domain && \
+ $PAYARA_PATH/bin/asadmin --user $ADMIN_USER --passwordfile=/opt/tmpfile change-admin-password && \
+ $PAYARA_PATH/bin/asadmin --user $ADMIN_USER --passwordfile=/opt/pwdfile enable-secure-admin && \
+ $PAYARA_PATH/bin/asadmin restart-domain
+
+# LIMPAR
+
+rm /opt/tmpfile
+rm /opt/$PKG_FILE_NAME
