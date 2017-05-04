@@ -1,4 +1,4 @@
-FROM openshift/base-centos7
+centos
 
 MAINTAINER Hugo C. Lima <yugolemom@gmail.com>
 
@@ -11,13 +11,14 @@ ENV PAYARA_VERSION 171
 ENV PKG_FILE_NAME payara-web-$PAYARA_VERSION.zip
 ENV PAYARA_PATH /usr/local/payara41
 
-LABEL io.k8s.description="Payara Server Full" \
-      io.k8s.display-name="Payara" \
-      io.openshift.expose-services="4848:http,8080:http,8181:http,8888:ping" \
-      io.openshift.tags="builder,payara" \
-      io.openshift.s2i.destination="/tmp"
+#LABEL io.k8s.description="Payara Server Full" \
+#      io.k8s.display-name="Payara" \
+#      io.openshift.expose-services="4848:http,8080:http,8181:http,8888:ping" \
+#      io.openshift.tags="builder,payara" \
+#      io.openshift.s2i.destination="/tmp"
 
 # Install Maven
+USER 1001
 
 RUN yum install -y --enablerepo=centosplus \
     tar unzip bc which lsof wget java-1.8.0-openjdk java-1.8.0-openjdk-devel && \
@@ -34,7 +35,10 @@ RUN unzip -qq /usr/local/$PKG_FILE_NAME -d $PAYARA_PATH
 RUN mkdir -p $PAYARA_PATH/deployments
 RUN ln -sf $PAYARA_PATH/bin/asadmin /usr/local/bin/asadmin
 
-COPY .s2i/bin/ $STI_SCRIPTS_PATH
+# COPY .s2i/bin/ $STI_SCRIPTS_PATH
 
-USER 1001
+RUN .s2i/bin/assenble
+RUN .s2i/bin/run
 EXPOSE 4848 8009 8080 8181
+
+
