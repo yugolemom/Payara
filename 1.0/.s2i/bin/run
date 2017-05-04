@@ -1,6 +1,8 @@
 #!/bin/bash
 
+# MAINTAINER Hugo C. Lima <yugolemom@gmail.com>
+
 echo "Run"
 
-/opt/payara41/bin/asadmin start-domain && 
+$PAYARA_PATH/bin/asadmin start-domain 
 

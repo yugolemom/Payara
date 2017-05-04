@@ -13,7 +13,7 @@ ENV PAYARA_PATH /opt/payara41
 
 LABEL io.k8s.description="Payara Server Full" \
       io.k8s.display-name="Payara" \
-      io.openshift.expose-services="8080:http,8888:ping,8081:https" \
+      io.openshift.expose-services="8080:http,8888:ping,8081:https,4848:https" \
       io.openshift.tags="builder,payara" \
       io.openshift.s2i.destination="/tmp"
 
@@ -32,15 +32,11 @@ RUN wget --quiet -O /opt/$PKG_FILE_NAME $PAYARA_PKG
 RUN unzip -qq /opt/$PKG_FILE_NAME -d /opt
 
 RUN mkdir -p $PAYARA_PATH/deployments
-# RUN useradd -b /opt -m -s /bin/bash -d $PAYARA_PATH payara && echo payara:payara | chpasswd
-# RUN chown -R payara:payara /opt
-
+RUN useradd -b /opt -m -s /bin/bash -d $PAYARA_PATH payara && echo payara:payara | chpasswd
 
 COPY .s2i/bin/ $STI_SCRIPTS_PATH
 
-# ENV JAVA_OPTIONS -Xmx512m
-
-USER 101
+USER payara
 WORKDIR $PAYARA_PATH
 
 EXPOSE 4848 8009 8080 8181

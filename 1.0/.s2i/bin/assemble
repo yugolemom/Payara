@@ -1,19 +1,27 @@
 #!/bin/bash
 
+# MAINTAINER Hugo C. Lima <yugolemom@gmail.com>
 
 echo "Assemble"
 
-# CRENCIAIS DOS USUARIOS 
+#CONFIG PAYARA WEB SERVER
 
-echo 'AS_ADMIN_PASSWORD=\n AS_ADMIN_NEWPASSWORD='$ADMIN_PASSWORD'\n EOF\n' >> /opt/tmpfile
-echo 'AS_ADMIN_PASSWORD='$ADMIN_PASSWORD'\n EOF\n' >> /opt/pwdfile
 
-$PAYARA_PATH/bin/asadmin start-domain && \
- $PAYARA_PATH/bin/asadmin --user $ADMIN_USER --passwordfile=/opt/tmpfile change-admin-password && \
- $PAYARA_PATH/bin/asadmin --user $ADMIN_USER --passwordfile=/opt/pwdfile enable-secure-admin && \
- $PAYARA_PATH/bin/asadmin restart-domain
+cat <<- EOF > /opt/tmpfile
+AS_ADMIN_PASSWORD=
+AS_ADMIN_NEWPASSWORD=$ADMIN_PASSWORD
+EOF
 
-# LIMPAR
+cat <<- EOF > /opt/pwdfile
+AS_ADMIN_PASSWORD=$ADMIN_PASSWORD
+EOF
+
+
+$PAYARA_PATH/bin/asadmin start-domain 
+$PAYARA_PATH/bin/asadmin --user $ADMIN_USER --passwordfile=/opt/tmpfile change-admin-password
+$PAYARA_PATH/bin/asadmin --user $ADMIN_USER --passwordfile=/opt/pwdfile enable-secure-admin 
+$PAYARA_PATH/bin/asadmin stop-domain
 
 rm /opt/tmpfile
+rm /opt/pwdfile
 rm /opt/$PKG_FILE_NAME
