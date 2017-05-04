@@ -1,4 +1,4 @@
-centos
+FROM centos
 
 MAINTAINER Hugo C. Lima <yugolemom@gmail.com>
 
