@@ -18,7 +18,8 @@ RUN apt-get install unzip wget
 RUN mkdir -p $PAYARA_PATH && \
 	wget --quiet -O /opt/$PKG_FILE_NAME $PAYARA_PKG && \
 	unzip -qq /opt/$PKG_FILE_NAME -d $PAYARA_PATH && \
-	mkdir -p $PAYARA_PATH/deployments && \
-	ln -sf $PAYARA_PATH/bin/asadmin /usr/bin/asadmin
+	mkdir -p $PAYARA_PATH/deployments
 
-CMD ["asadmin"]["start-domain"]
+WORKDIR $PAYARA_PATH
+
+CMD ["/bin/asadmin"]["start-domain"]
