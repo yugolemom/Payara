@@ -1,5 +1,3 @@
-# FROM openshift/base-centos7
-
 FROM nimmis/java-centos:oracle-8-jdk
 
 MAINTAINER Hugo C. Lima <yugolemom@gmail.com>
@@ -13,16 +11,6 @@ ENV PAYARA_VERSION 171
 ENV PKG_FILE_NAME payara-web-$PAYARA_VERSION.zip
 ENV PAYARA_PATH /usr/local/payara41
 
-# LABEL io.k8s.description="Payara Server Full" \
-#      io.k8s.display-name="Payara" \
-#      io.openshift.expose-services="4848:http,8080:http,8181:http,8888:ping" \
-#      io.openshift.tags="builder,payara" \
-#      io.openshift.s2i.destination="/tmp"
-
-# INSTALL JAVA
-
-# RUN yum install -y --enablerepo=centosplus unzip wget java-1.8.0-openjdk java-1.8.0-openjdk-devel
- 
 # INSTALL PAYARA V 171
 
 RUN yum install -y unzip wget 
@@ -33,8 +21,5 @@ RUN mkdir -p $PAYARA_PATH && \
 	mkdir -p $PAYARA_PATH/deployments && \
 	ln -sf $PAYARA_PATH/bin/asadmin /usr/local/bin/asadmin
 
-# COPY ./s2i/bin/ $STI_SCRIPTS_PATH
-
 CMD ["bash"]
-
-# USER 1001
+CMD ["asadmin"]["start-domain"]
