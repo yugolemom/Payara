@@ -2,8 +2,6 @@ FROM openshift/base-centos7
 
 MAINTAINER Hugo C. Lima <yugolemom@gmail.com>
 
-ENV MAVEN_VERSION 3.3.9
-
 ENV ADMIN_USER admin
 ENV ADMIN_PASSWORD admin 
 ENV PAYARA_PKG https://s3-eu-west-1.amazonaws.com/payara.fish/Payara+Downloads/Payara+4.1.1.171.0.1/payara-web-4.1.1.171.0.1.zip
@@ -18,15 +16,10 @@ LABEL io.k8s.description="Payara Server Full" \
       io.openshift.s2i.destination="/tmp"
 
 # Install Maven
-USER 1001
 
-RUN yum install -y --enablerepo=centosplus \
-    tar unzip bc which lsof wget java-1.8.0-openjdk java-1.8.0-openjdk-devel && \
-    yum clean all -y && \
-    (curl -0 https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz | \
-    tar -zx -C /usr/local) && \
-    ln -sf /usr/local/apache-maven-$MAVEN_VERSION/bin/mvn /usr/local/bin/mvn
 
+RUN yum install -y --enablerepo=centosplus unzip wget java-1.8.0-openjdk \ 		java-1.8.0-openjdk-devel
+ 
 # Install Payara
 
 RUN mkdir -p $PAYARA_PATH && \
@@ -37,4 +30,5 @@ RUN mkdir -p $PAYARA_PATH && \
 
 COPY .s2i/bin/ $STI_SCRIPTS_PATH
 
+USER 1001
 EXPOSE 4848 8009 8080 8181
