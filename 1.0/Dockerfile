@@ -2,6 +2,8 @@ FROM openshift/base-centos7
 
 MAINTAINER Hugo C. Lima <yugolemom@gmail.com>
 
+EXPOSE 4848 8009 8080 8181
+
 ENV ADMIN_USER admin
 ENV ADMIN_PASSWORD admin 
 ENV PAYARA_PKG https://s3-eu-west-1.amazonaws.com/payara.fish/Payara+Downloads/Payara+4.1.1.171.0.1/payara-web-4.1.1.171.0.1.zip
@@ -27,7 +29,6 @@ RUN mkdir -p $PAYARA_PATH && \
 	mkdir -p $PAYARA_PATH/deployments && \
 	ln -sf $PAYARA_PATH/bin/asadmin /usr/local/bin/asadmin
 
-COPY .s2i/bin/ $STI_SCRIPTS_PATH
+COPY ./s2i/bin/ $STI_SCRIPTS_PATH
 
-USER default
-EXPOSE 4848 8009 8080 8181
+USER 1001
