@@ -22,4 +22,4 @@ RUN mkdir -p $PAYARA_PATH && \
 
 WORKDIR $PAYARA_PATH
 
-CMD ["/bin/asadmin"]["start-domain"]
+CMD ["/bin/asadmin","start-domain"]
