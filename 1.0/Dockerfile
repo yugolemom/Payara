@@ -15,12 +15,11 @@ LABEL io.k8s.description="Payara Server Full" \
       io.openshift.tags="builder,payara" \
       io.openshift.s2i.destination="/tmp"
 
-# Install Maven
-
+# INSTALL JAVA
 
 RUN yum install -y --enablerepo=centosplus unzip wget java-1.8.0-openjdk \ 		java-1.8.0-openjdk-devel
  
-# Install Payara
+# INSTALL PAYARA V 171
 
 RUN mkdir -p $PAYARA_PATH && \
 	wget --quiet -O /usr/local/$PKG_FILE_NAME $PAYARA_PKG && \
