@@ -20,6 +20,4 @@ RUN mkdir -p $PAYARA_PATH && \
 	unzip -qq /opt/$PKG_FILE_NAME -d $PAYARA_PATH && \
 	mkdir -p $PAYARA_PATH/deployments
 
-WORKDIR $PAYARA_PATH
-
-CMD ["/bin/asadmin","start-domain"]
+CMD $PAYARA_PATH/bin/asadmin start-domain
