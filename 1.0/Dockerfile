@@ -1,23 +1,29 @@
-FROM mcpayment/ubuntu-java8:1604
+FROM centos:7
 
 MAINTAINER Hugo C. Lima <yugolemom@gmail.com>
 
-EXPOSE 4848 8009 8080 8181
-
-ENV ADMIN_USER admin
-ENV ADMIN_PASSWORD admin 
-ENV PAYARA_PKG https://s3-eu-west-1.amazonaws.com/payara.fish/Payara+Downloads/Payara+4.1.1.171.0.1/payara-web-4.1.1.171.0.1.zip
-ENV PAYARA_VERSION 171
-ENV PKG_FILE_NAME payara-web-$PAYARA_VERSION.zip
-ENV PAYARA_PATH /opt/payara41
-
 # INSTALL PAYARA V 171
 
-RUN apt-get install unzip wget
+ENV ADMIN_USER admin \
+	ADMIN_PASSWORD admin 
 
-RUN mkdir -p $PAYARA_PATH && \
-	wget --quiet -O /opt/$PKG_FILE_NAME $PAYARA_PKG && \
-	unzip -qq /opt/$PKG_FILE_NAME -d $PAYARA_PATH && \
-	mkdir -p $PAYARA_PATH/deployments
+ENV PAYARA_PKG=payara-web-4.1.1.171.0.1.zip \
+    PAYARA_URL=https://s3-eu-west-1.amazonaws.com/payara.fish/Payara+Downloads/Payara+4.1.1.171.0.1/payara-web-4.1.1.171.0.1.zip \
+    PAYARA_HOME=/payara41 \
+    PATH=$PATH:/payara41/bin \
+    JAVA_HOME=/usr/lib/jvm/java-openjdk
 
-CMD $PAYARA_PATH/bin/asadmin start-domain
+RUN yum -y install wget unzip java-1.8.0-openjdk-devel && \
+    wget --quiet $PAYARA_URL && \
+    unzip -o $PAYARA_PKG && \
+    rm -f $PAYARA_PKG && \
+    yum -y remove wget unzip && rm -rf /var/cache/yum/* && \
+    mkdir -p $PAYARA_PATH/scripts
+
+COPY s2i/bin/ $PAYARA_HOME/scripts
+
+ENTRYPOINT ["/payara41/scripts/run"]
+
+EXPOSE 4848 8080 8181
+
+CMD ["asadmin", "start-domain", "-v"]
