@@ -18,11 +18,11 @@ RUN yum -y install wget unzip java-1.8.0-openjdk-devel && \
     unzip -o $PAYARA_PKG && \
     rm -f $PAYARA_PKG && \
     yum -y remove wget unzip && rm -rf /var/cache/yum/* && \
-    mkdir -p $PAYARA_PATH/scripts && \
-    mkdir -p $PAYARA_PATH/deployments
+    mkdir -p $PAYARA_HOME/scripts && \
+    mkdir -p $PAYARA_HOME/deployments
 
 COPY start.sh $PAYARA_HOME/scripts
 
 EXPOSE 4848 8080 8181
 
-RUN ["/opt/payara41/scripts/start.sh"]
+RUN $PAYARA_HOME/scripts/start.sh
