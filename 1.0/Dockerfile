@@ -21,7 +21,7 @@ RUN yum -y install wget unzip java-1.8.0-openjdk-devel && \
     mkdir -p $PAYARA_PATH/scripts && \
     mkdir -p $PAYARA_PATH/deployments
 
-COPY s2i/bin/ $PAYARA_HOME/scripts
+COPY start.sh $PAYARA_HOME/scripts
 
 ENTRYPOINT ["/opt/payara41/scripts/run"]
 
