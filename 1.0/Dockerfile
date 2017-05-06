@@ -23,8 +23,6 @@ RUN yum -y install wget unzip java-1.8.0-openjdk-devel && \
 
 COPY start.sh $PAYARA_HOME/scripts
 
-ENTRYPOINT ["/opt/payara41/scripts/start.sh"]
-
 EXPOSE 4848 8080 8181
 
-RUN ["asadmin","restart-domain"]
+RUN ["/opt/payara41/scripts/start.sh"]
