@@ -6,21 +6,22 @@ echo "RUN"
 
 echo "CONFIG OK!"
 
-cat <<- EOF > /opt/tmpfile
+cat <<- EOF > /tmp/tmpfile
 AS_ADMIN_PASSWORD=
 AS_ADMIN_NEWPASSWORD=$ADMIN_PASSWORD
 EOF
 
-cat <<- EOF > /opt/pwdfile
+cat <<- EOF > /tmp/pwdfile
 AS_ADMIN_PASSWORD=$ADMIN_PASSWORD
 EOF
 
+asadmin --user=admin --passwordfile=/tmp/tmpfile change-admin-password --domain_name domain1
+asadmin --user=admin start-domain 
+asadmin --user=admin --passwordfile=/tmp/pwdfile enable-secure-admin 
+asadmin --user=admin stop-domain
 
-asadmin start-domain 
-asadmin --user $ADMIN_USER --passwordfile=/opt/tmpfile change-admin-password
-asadmin --user $ADMIN_USER --passwordfile=/opt/pwdfile enable-secure-admin 
-asadmin restart-domain
+rm /tmp/tmpfile
+rm /tmp/pwdfile
 
-rm /opt/tmpfile
-rm /opt/pwdfile
-rm /opt/$PKG_FILE_NAME
+exec "$@"
+
